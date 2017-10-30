@@ -1,0 +1,40 @@
+{
+  "variables": {
+    "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/26/Workstation/x86_64/iso/Fedora-Workstation-netinst-x86_64-26-1.5.iso",
+    "iso_checksum": "f514040516dc512119aad6316746569b231e157724d4f257af76825c483e1598",
+    "name": "devbox"
+  },
+  "builders": [
+    {
+      "type": "qemu",
+      "accelerator": "kvm",
+      "format": "qcow2",
+      "iso_url": "{{ user `iso_url` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "sha256",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "disk_interface": "virtio",
+      "disk_size": 20000,
+      "http_directory": ".",
+      "output_directory": "vm/qemu/",
+      "shutdown_command": "echo password | sudo -S shutdown now",
+      "ssh_host_port_max": 2229,
+      "ssh_host_port_min": 2222,
+      "ssh_port": 22,
+      "ssh_username": "jkpl",
+      "ssh_password": "password",
+      "ssh_timeout": "15m",
+      "ssh_pty" : true,
+      "vm_name": "{{ user `name` }}",
+      "headless": true,
+      "qemuargs": [
+        ["-m", "1024M"]
+      ]
+    }
+  ],
+  "provisioners": [
+  ]
+}
